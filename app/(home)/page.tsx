@@ -10,7 +10,7 @@ export default function RootPage() {
   if (!session) {
     redirect("/login");
   }
-  
+
   if (isPending) {
     return <div>Loading...</div>;
   }
@@ -21,7 +21,7 @@ export default function RootPage() {
 
   return (
     <>
-      <div className="min-h-screen p-8">
+      <div className="min-h-screen p-8 font-mono">
         <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
         <p>Welcome, {session.user.name}!</p>
         <p>{session.user.email}</p>
