@@ -1,14 +1,18 @@
-"use client"
+"use client";
 
 import { SignInView } from "@/components/auth/login";
 import { useSession } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 
 const Page = () => {
-  const session = useSession()
+  const { data: session, isPending } = useSession();
 
-  if (!session) {
-    redirect("/sign-up");
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (session) {
+    redirect("/");
   }
 
   return <SignInView />;
