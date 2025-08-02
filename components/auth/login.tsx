@@ -22,12 +22,13 @@ import {
 } from "@/components/ui/form";
 import { signInSchema, type SignInFormData } from "@/lib/validations/auth";
 import { toast } from "sonner";
+import { useTheme } from "next-themes";
 
 export const SignInView = () => {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-
+  const { theme } = useTheme();
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -92,25 +93,27 @@ export const SignInView = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-white">
+    <div className="min-h-screen w-full flex items-center justify-center bg-background dark:bg-background">
       <div className="w-full max-w-md mx-auto p-6">
-        <div className="rounded-xl p-8 shadow-sm border">
+        <div className="rounded-xl p-8 shadow-sm border border-border bg-white dark:bg-muted">
           <div className="flex flex-col items-center text-center mb-8">
             <div className="flex items-center gap-2 mb-4">
-              <Image src="/logo.svg" alt="Logo" width={150} height={40} />
+              <Image src={theme === "dark" ? "/golive-white.svg" : "/logo.svg"} alt="Logo" width={150} height={40} />
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
               Sign in to goLive
             </h2>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
               Welcome back! Please sign in to continue
             </p>
           </div>
 
           {!!error && (
-            <Alert className="bg-red-50 border-red-200 mb-6">
-              <OctagonAlertIcon className="h-4 w-4 text-red-600" />
-              <AlertTitle className="text-red-800">{error}</AlertTitle>
+            <Alert className="bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800 mb-6">
+              <OctagonAlertIcon className="h-4 w-4 text-red-600 dark:text-red-400" />
+              <AlertTitle className="text-red-800 dark:text-red-300">
+                {error}
+              </AlertTitle>
             </Alert>
           )}
 
@@ -124,14 +127,14 @@ export const SignInView = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-700">
+                    <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       Email address
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="email"
                         placeholder="Enter your email address"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-transparent"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-background text-gray-900 dark:text-white focus:outline-none focus:ring-0 focus:border-transparent"
                         {...field}
                       />
                     </FormControl>
@@ -145,7 +148,7 @@ export const SignInView = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-gray-700">
+                    <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       Password
                     </FormLabel>
                     <FormControl>
@@ -153,13 +156,13 @@ export const SignInView = () => {
                         <Input
                           type={showPassword ? "text" : "password"}
                           placeholder="Enter your password"
-                          className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-transparent"
+                          className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-background text-gray-900 dark:text-white focus:outline-none focus:ring-0 focus:border-transparent"
                           {...field}
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                         >
                           {showPassword ? (
                             <EyeOff className="h-4 w-4" />
@@ -176,7 +179,7 @@ export const SignInView = () => {
 
               <Button
                 type="submit"
-                className="cursor-pointer w-full bg-gray-900 text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition-all duration-300 relative overflow-hidden group"
+                className="cursor-pointer w-full bg-black dark:bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-900 transition-all duration-300 relative overflow-hidden group font-medium"
                 disabled={pending}
               >
                 <span className="relative z-10">
@@ -189,17 +192,19 @@ export const SignInView = () => {
 
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
+              <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">or</span>
+              <span className="px-2 bg-white dark:bg-muted text-gray-500 dark:text-gray-400">
+                or
+              </span>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Button
               variant="outline"
               type="button"
-              className="cursor-pointer w-full flex items-center justify-center gap-3 py-2 px-4 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-all duration-300 relative overflow-hidden group"
+              className="cursor-pointer w-full flex items-center justify-center gap-3 py-2 px-4 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-background hover:bg-gray-50 dark:hover:bg-muted transition-all duration-300 relative overflow-hidden group"
               disabled={pending}
               onClick={() => onSocial("google")}
             >
@@ -211,14 +216,14 @@ export const SignInView = () => {
                   height={20}
                   className="w-5 h-5"
                 />
-                <span className="text-gray-700">Google</span>
+                <span className="text-gray-700 dark:text-gray-200">Google</span>
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100/50 dark:via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
             </Button>
             <Button
               variant="outline"
               type="button"
-              className="cursor-pointer w-full flex items-center justify-center gap-3 py-2 px-4 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-all duration-300 relative overflow-hidden group"
+              className="cursor-pointer w-full flex items-center justify-center gap-3 py-2 px-4 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-background hover:bg-gray-50 dark:hover:bg-muted transition-all duration-300 relative overflow-hidden group"
               disabled={pending}
               onClick={() => onSocial("github")}
             >
@@ -230,15 +235,18 @@ export const SignInView = () => {
                   height={20}
                   className="w-5 h-5"
                 />
-                <span className="text-gray-700">GitHub</span>
+                <span className="text-gray-700 dark:text-gray-200">GitHub</span>
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100/50 dark:via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
             </Button>
           </div>
 
-          <div className="text-center mt-6 text-sm text-gray-600">
+          <div className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
             Don&apos;t have an account?{" "}
-            <Link href="/sign-up" className="text-gray-900 underline">
+            <Link
+              href="/sign-up"
+              className="text-gray-900 dark:text-white underline"
+            >
               Sign up
             </Link>
           </div>

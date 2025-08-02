@@ -7,12 +7,12 @@ import { redirect } from "next/navigation";
 export default function RootPage() {
   const { data: session, isPending } = useSession();
 
-  if (!session) {
-    redirect("/login");
-  }
-
   if (isPending) {
     return <div>Loading...</div>;
+  }
+
+  if (!session) {
+    redirect("/login");
   }
 
   const handleSignOut = async () => {

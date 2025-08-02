@@ -50,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar
       collapsible={isMobile ? "offcanvas" : "none"}
       {...props}
-      className="bg-white! overflow-hidden"
+      className="overflow-hidden"
     >
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2">

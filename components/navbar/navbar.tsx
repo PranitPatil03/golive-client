@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Video, Menu, Bell } from "lucide-react";
+import { Search, Menu, Sun, Moon, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,22 +14,33 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import { useTheme } from "next-themes";
+import { signOut, useSession } from "@/lib/auth-client";
 
 export function Navbar() {
-  const { toggleSidebar, isMobile } = useSidebar();
+  const { toggleSidebar } = useSidebar();
   const router = useRouter();
+  const { setTheme, theme } = useTheme();
+  const { data: session } = useSession(); 
 
-  const user = {
-    name: "User",
-    email: "user@example.com",
-    avatar: "/avatars/user.jpg",
-  };
+  // Use session user if available, fallback to dummy
+  const user = session?.user
+    ? {
+        name: session.user.name || "User",
+        email: session.user.email || "user@example.com",
+        avatar: session.user.image || "/avatars/user.jpg",
+      }
+    : {
+        name: "User",
+        email: "user@example.com",
+        avatar: "/avatars/user.jpg",
+      };
 
   const handleProfileClick = () => {
     router.push("/settings?section=profile");
   };
 
-  const handleDropdownItem = (action: string) => {
+  const handleDropdownItem = async (action: string) => {
     switch (action) {
       case "notifications":
         router.push("/notifications");
@@ -40,6 +51,7 @@ export function Navbar() {
       case "theme":
         break;
       case "logout":
+        await signOut(); 
         break;
       default:
         break;
@@ -60,7 +72,7 @@ export function Navbar() {
         </Button>
         <div>
           <Image
-            src="/logo.svg"
+            src={theme === "dark" ? "/golive-white.svg" : "/logo.svg"}
             alt="GoLive"
             width={10}
             height={10}
@@ -98,15 +110,55 @@ export function Navbar() {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuContent align="end" className="w-56 mt-2">
+            <div className="px-3 py-2">
+              <div className="font-semibold">{user.name}</div>
+              <div className="text-xs text-muted-foreground">{user.email}</div>
+            </div>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => handleDropdownItem("notifications")}>
               Notifications
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleDropdownItem("profile")}>
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDropdownItem("theme")}>
+            <DropdownMenuItem>
               Theme
+              <div
+                className="flex gap-1 ml-5 rounded-full bg-muted px-2 py-1"
+                style={{ borderRadius: "9999px" }}
+              >
+                <span
+                  onClick={() => setTheme("system")}
+                  className={`flex items-center cursor-pointer rounded-full p-1 transition-colors ${theme === "system"
+                      ? "bg-primary text-primary-foreground shadow"
+                      : "hover:bg-accent"
+                    }`}
+                  title="System"
+                >
+                  <Monitor className="h-4 w-4" />
+                </span>
+                <span
+                  onClick={() => setTheme("light")}
+                  className={`flex items-center cursor-pointer rounded-full p-1 transition-colors ${theme === "light"
+                      ? "bg-primary text-primary-foreground shadow"
+                      : "hover:bg-accent"
+                    }`}
+                  title="Light"
+                >
+                  <Sun className="h-4 w-4" />
+                </span>
+                <span
+                  onClick={() => setTheme("dark")}
+                  className={`flex items-center cursor-pointer rounded-full p-1 transition-colors ${theme === "dark"
+                      ? "bg-primary text-primary-foreground shadow"
+                      : "hover:bg-accent"
+                    }`}
+                  title="Dark"
+                >
+                  <Moon className="h-4 w-4" />
+                </span>
+              </div>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => handleDropdownItem("logout")}>
