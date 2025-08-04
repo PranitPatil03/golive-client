@@ -116,13 +116,13 @@ export function Navbar() {
               <div className="text-xs text-muted-foreground">{user.email}</div>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleDropdownItem("notifications")}>
+            <DropdownMenuItem onClick={() => handleDropdownItem("notifications")} className="p-3">
               Notifications
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDropdownItem("profile")}>
+            <DropdownMenuItem onClick={() => handleDropdownItem("profile")} className="p-3">
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 justify-between">
               Theme
               <div
                 className="flex gap-1 ml-5 rounded-full bg-muted px-2 py-1"
