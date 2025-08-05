@@ -21,7 +21,7 @@ export function Navbar() {
   const { toggleSidebar } = useSidebar();
   const router = useRouter();
   const { setTheme, theme } = useTheme();
-  const { data: session } = useSession(); 
+  const { data: session } = useSession();
 
   // Use session user if available, fallback to dummy
   const user = session?.user
@@ -40,6 +40,10 @@ export function Navbar() {
     router.push("/settings?section=profile");
   };
 
+  const handleGoLiveClick = () => {
+    router.push("/stream/setup");
+  };
+
   const handleDropdownItem = async (action: string) => {
     switch (action) {
       case "notifications":
@@ -51,7 +55,7 @@ export function Navbar() {
       case "theme":
         break;
       case "logout":
-        await signOut(); 
+        await signOut();
         break;
       default:
         break;
@@ -64,15 +68,15 @@ export function Navbar() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden mr-2"
+          className="mr-2"
           onClick={toggleSidebar}
         >
           <Menu className="h-5 w-5" />
           <span className="sr-only">Toggle sidebar</span>
         </Button>
-        <div>
+        <div className="md:hidden">
           <Image
-            src={theme === "dark" ? "/golive-white.svg" : "/logo.svg"}
+            src={theme === "dark" ? "./golive-white.svg" : "./logo.svg"}
             alt="GoLive"
             width={10}
             height={10}
@@ -92,7 +96,7 @@ export function Navbar() {
         <Button
           variant="default"
           size="lg"
-          onClick={handleProfileClick}
+          onClick={handleGoLiveClick}
           className="cursor-pointer hidden md:inline-flex"
         >
           Go Live
@@ -116,10 +120,16 @@ export function Navbar() {
               <div className="text-xs text-muted-foreground">{user.email}</div>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleDropdownItem("notifications")} className="p-3">
+            <DropdownMenuItem
+              onClick={() => handleDropdownItem("notifications")}
+              className="p-3"
+            >
               Notifications
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDropdownItem("profile")} className="p-3">
+            <DropdownMenuItem
+              onClick={() => handleDropdownItem("profile")}
+              className="p-3"
+            >
               Profile
             </DropdownMenuItem>
             <DropdownMenuItem className="flex items-center gap-2 justify-between">
@@ -130,30 +140,33 @@ export function Navbar() {
               >
                 <span
                   onClick={() => setTheme("system")}
-                  className={`flex items-center cursor-pointer rounded-full p-1 transition-colors ${theme === "system"
+                  className={`flex items-center cursor-pointer rounded-full p-1 transition-colors ${
+                    theme === "system"
                       ? "bg-primary text-primary-foreground shadow"
                       : "hover:bg-accent"
-                    }`}
+                  }`}
                   title="System"
                 >
                   <Monitor className="h-4 w-4" />
                 </span>
                 <span
                   onClick={() => setTheme("light")}
-                  className={`flex items-center cursor-pointer rounded-full p-1 transition-colors ${theme === "light"
+                  className={`flex items-center cursor-pointer rounded-full p-1 transition-colors ${
+                    theme === "light"
                       ? "bg-primary text-primary-foreground shadow"
                       : "hover:bg-accent"
-                    }`}
+                  }`}
                   title="Light"
                 >
                   <Sun className="h-4 w-4" />
                 </span>
                 <span
                   onClick={() => setTheme("dark")}
-                  className={`flex items-center cursor-pointer rounded-full p-1 transition-colors ${theme === "dark"
+                  className={`flex items-center cursor-pointer rounded-full p-1 transition-colors ${
+                    theme === "dark"
                       ? "bg-primary text-primary-foreground shadow"
                       : "hover:bg-accent"
-                    }`}
+                  }`}
                   title="Dark"
                 >
                   <Moon className="h-4 w-4" />

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Home, CreditCard, Settings2, MessageSquare } from "lucide-react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 
 import { NavMain } from "./nav-main";
 import { NavBottom } from "./nav-bottom";
@@ -44,25 +45,36 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {isMobile } = useSidebar();
+  const { isMobile, state } = useSidebar();
+  const { theme } = useTheme();
+
+  // Determine which logo to show based on collapsed state and theme
+  const getLogoSrc = () => {
+    if (state === "collapsed" && !isMobile) {
+      return "/golive-icon.svg";
+    }
+    return theme === "dark" ? "/golive-white.svg" : "/logo.svg";
+  };
 
   return (
     <Sidebar
-      collapsible={isMobile ? "offcanvas" : "none"}
+      collapsible={isMobile ? "offcanvas" : "icon"}
       {...props}
-      className="overflow-hidden bg-background"
+      className="overflow-hidden bg-background transition-all duration-300 ease-in-out"
     >
       <SidebarHeader>
-        <div className="flex items-center gap-2 px-2">
-          {isMobile && (
+        <div className="flex items-center gap-2 transition-all duration-300 ease-in-out">
+          <div className="relative overflow-hidden">
             <Image
-              src="/logo.svg"
+              src={getLogoSrc()}
               alt="GoLive"
-              width={10}
-              height={10}
-              className="h-7 w-auto"
+              width={32}
+              height={32}
+              className={`w-auto transition-all duration-500 ease-in-out transform ${
+                state === "collapsed" ? "h-10 scale-110" : "h-7 scale-100"
+              }`}
             />
-          )}
+          </div>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -71,7 +83,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <NavBottom items={data.navBottom} />
       </SidebarFooter>
-      {isMobile && <SidebarRail />}
+      <SidebarRail />
     </Sidebar>
   );
 }

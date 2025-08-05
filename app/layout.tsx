@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "goLive",
-  description: "goLive is a platform for live streaming",
+  title: "go-live",
+  description: "go-live is a platform for live streaming",
 };
 
 export default function RootLayout({
